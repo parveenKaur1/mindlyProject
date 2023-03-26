@@ -236,15 +236,24 @@ class _MyRegisterState extends State<MyRegister> {
                             var collection = db.collection(
                                 COLLECTION_NAME_signup); //accesses collection name
 
-                            var salt = "mindlys";
                             var data =
                                 utf8.encode(g_password); // data being hashed
                             var hashvalue = sha1.convert(data);
 
                             await collection.insert({
                               "name": g_name,
-                              "password": salt + hashvalue.toString(),
+                              "password": hashvalue.toString(),
                               "email": g_email
+                            });
+                            var databaseLogin = await mongo.Db.create(
+                                MONGO_URL_LOGIN); //wait for check in table to open
+                            await databaseLogin.open(); //wait for it to open
+                            var userCollection = // connect to the specific table
+                                databaseLogin.collection(COLLECTION_NAME_users);
+
+                            await userCollection.insert({
+                              "email": g_email,
+                              "isCheckedIn": "false",
                             });
 
                             // final arrData = await collection.find().toList();

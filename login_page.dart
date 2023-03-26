@@ -13,15 +13,17 @@
 */
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/quiz_screen.dart';
+import 'package:flutter_application_1/check-in/quiz_screen.dart';
 import 'dart:developer';
 // import 'package:flutter/cupertino.dart';
 // import 'package:flutter/material.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
 // import 'package:mongo_dart/mongo_dart.dart';
 
-import 'check_in.dart';
-import 'constant.dart';
+import '../constant.dart';
+
+import 'package:crypto/crypto.dart';
+import 'dart:convert'; // for the utf8.encode method
 
 class MyLogin extends StatefulWidget {
   //class for the login landing page.
@@ -35,6 +37,7 @@ class _MyLoginState extends State<MyLogin> {
   // String g_name = "";
   String g_password = "";
   String g_email = "";
+  var hashvalue;
   TextEditingController _email = new TextEditingController();
 
   //class definition.
@@ -160,11 +163,17 @@ class _MyLoginState extends State<MyLogin> {
                           var status =
                               db.serverStatus(); //provides the status of url
                           // print(status);//debug print to ensure sucessful status
-                          var collection = db.collection(
-                              COLLECTION_NAME_signup); //determine the collection of the entry
+                          var collection =
+                              db.collection(COLLECTION_NAME_signup);
+                          var data =
+                              utf8.encode(g_password); // data being hashed
+                          hashvalue = sha1.convert(data);
+
+                          print(
+                              "HASH: $hashvalue"); //determine the collection of the entry
                           temp = await collection
                               .find(mongo.where
-                                  .eq('password', g_password)
+                                  .eq('password', hashvalue.toString())
                                   .eq('email', g_email))
                               .toList(); //look for specific entry
                           // print(temp[0]); //debug

@@ -3,28 +3,43 @@
 * BRIEF DESCRIPTION - - This creates the frontend of the music page
 * PROGRAMMERS NAME - Parveen Kaur 
 * DATE CODE CREATED - November 30th 2022
-* DATE REVISED - November 30th 2022
+* DATE REVISED - March 9th
+                 Parveen Kaur - added proper navigation between pages
+               - March 26th
+                 Jui Nagarkar - added navigator path for the music files  
 * KNOWN FAULT - None
 */
 
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter_application_1/music/play_music.dart';
+import 'package:flutter_application_1/resources/ResourcePg.dart';
+
+import '../DemoApp.dart';
+//import '../animal/animal.dart';
+import '../games/games_meanu_pg.dart';
+import '../journal_page.dart';
 
 class MyMusic extends StatefulWidget {
   //class for the login landing page.
-  const MyMusic({Key? key}) : super(key: key); // constructor for log in page.
+  String email = "";
+  MyMusic({required this.email}); // constructor for log in page.
 
   @override
-  _MyMusicState createState() => _MyMusicState(); //creates login page.
+  _MyMusicState createState() =>
+      _MyMusicState(email: "$email"); //creates login page.
 }
 
 class _MyMusicState extends State<MyMusic> {
+  String email;
+  _MyMusicState({required this.email});
   Widget build(BuildContext context) {
     String appTitle = "Mindly Music Page";
     return Container(
       // container widget. What the page is going to contain.
 
       child: Scaffold(
+        //bottombar for navigation of pages
         bottomNavigationBar: BottomAppBar(
             color: Colors.blue,
             child: Row(
@@ -36,7 +51,10 @@ class _MyMusicState extends State<MyMusic> {
                   iconSize: 50, //size
                   onPressed: () {
                     //functionality
-                    Navigator.pushNamed(context, 'game_page');
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => MyGame_Meanu(
+                              email: ('${email}'),
+                            )));
                   },
                 ),
                 IconButton(
@@ -46,7 +64,10 @@ class _MyMusicState extends State<MyMusic> {
                   iconSize: 50, //size
                   onPressed: () {
                     //functionality
-                    Navigator.pushNamed(context, 'journal_page');
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => MyJournal(
+                              email: ('${email}'),
+                            )));
                   },
                 ),
                 IconButton(
@@ -55,8 +76,13 @@ class _MyMusicState extends State<MyMusic> {
                   icon: Image.asset('assets/home.png'), //image
                   iconSize: 50, //size
                   onPressed: () {
+                    // if tapped, go to this page
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => DemoApp(
+                              email: ('$email'),
+                            )));
                     //functionality
-                    Navigator.pushNamed(context, 'home_page');
+                    // Navigator.pushNamed(context, 'home_page');
                   },
                 ),
                 IconButton(
@@ -65,7 +91,11 @@ class _MyMusicState extends State<MyMusic> {
                   icon: Image.asset('assets/music.png'), //image
                   iconSize: 50, //size
                   onPressed: () {
-                    Navigator.pushNamed(context, 'music_page');
+                    Navigator.of(context).push(MaterialPageRoute(
+                        // if tapped, go to this page
+                        builder: (context) => MyMusic(
+                              email: ('$email'),
+                            )));
                   }, //functionality
                 ),
                 IconButton(
@@ -73,9 +103,26 @@ class _MyMusicState extends State<MyMusic> {
                   icon: Image.asset('assets/info.png'), //image
                   iconSize: 50, //size
                   onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        // if tapped, go to this page
+                        builder: (context) => Resources(
+                              email: ('$email'),
+                            )));
                     //functionality
-                    Navigator.pushNamed(context, 'resource_page');
                   },
+                ),
+                IconButton(
+                  // Icon buttom
+                  // mainAxisAlignment: MainAxisAlignment.center,
+                  icon: Image.asset('assets/animal.png'), //image
+                  iconSize: 50, //size
+                  onPressed: () {
+                    // Navigator.of(context).push(MaterialPageRoute(
+                    //     // if tapped, go to this page
+                    //     builder: (context) => MyAnimal(
+                    //           email: ('$email'),
+                    //         )));
+                  }, //functionality
                 ),
               ],
             )),
@@ -114,12 +161,33 @@ class _MyMusicState extends State<MyMusic> {
                   // mainAxisAlignment: MainAxisAlignment.center,
                   icon: Image.asset('assets/play.png'), //image
                   onPressed: () async {
-                    Navigator.pushNamed(context, 'play_page');
+                    //this is the navigator method for playing song 1
+                    Navigator.of(context).push(MaterialPageRoute(
+                        //     // if tapped, go to this page
+                        builder: (context) => PlayMusic(
+                              songNumber: 1,
+                            )));
 
                     // final player = AudioCache();
                     // player.play('testAudio.mp3');
                   },
-                  label: const Text("Tune 1: Song Name"), //button label
+                  label: const Text("Tune 1: Meditation"), //button label
+                ),
+                const Text("\n"),
+                ElevatedButton.icon(
+                  // mainAxisAlignment: MainAxisAlignment.center,
+                  icon: Image.asset('assets/play.png'), //image
+                  onPressed: () {
+                    //this is the navigator method for playing song 2
+                    Navigator.of(context).push(MaterialPageRoute(
+                        //     // if tapped, go to this page
+                        builder: (context) => PlayMusic(
+                              songNumber: 2,
+                            )));
+                    //Navigator.pushNamed(context, 'play_page');
+                    //functionality
+                  },
+                  label: const Text("Tune 2: Soothing"), //button label
                 ),
                 const Text("\n"),
                 ElevatedButton.icon(
@@ -127,17 +195,15 @@ class _MyMusicState extends State<MyMusic> {
                   icon: Image.asset('assets/play.png'), //image
                   onPressed: () {
                     //functionality
+                    //Navigator.pushNamed(context, 'play_page');
+                    //this is the navigator method for playing song 3
+                    Navigator.of(context).push(MaterialPageRoute(
+                        //     // if tapped, go to this page
+                        builder: (context) => PlayMusic(
+                              songNumber: 3,
+                            )));
                   },
-                  label: const Text("Tune 2: Song Name"), //button label
-                ),
-                const Text("\n"),
-                ElevatedButton.icon(
-                  // mainAxisAlignment: MainAxisAlignment.center,
-                  icon: Image.asset('assets/play.png'), //image
-                  onPressed: () {
-                    //functionality
-                  },
-                  label: const Text("Tune 3: Song Name"), //button label
+                  label: const Text("Tune 3: Upbeat"), //button label
                 ),
                 const Text("\n"),
                 Row(
