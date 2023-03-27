@@ -2,13 +2,17 @@
 * NAME OF CODE ARTIFACT - forgotPass_page.dart
 * BRIEF DESCRIPTION - This creates the frontend of the application that deals with forgot password
                     Users are asked to key in their email for verification
-* PROGRAMMERS NAME - Parveen Kaur
+* PROGRAMMERS NAME - Parveen Kaur, Eduardo Sanchez
 * DATE CODE CREATED - January 28th 2023
-* DATE REVISED - 
+* DATE REVISED - March 26 20023
+* known issue - line 138, arguement where "app" is located.
 */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/main.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'package:mongo_dart/mongo_dart.dart' as mongo;
+import 'package:realm/realm.dart'; // added realm sdk for reset password.
 
 class MyForgotPass extends StatefulWidget {
   //class for the login landing page.
@@ -22,6 +26,8 @@ class MyForgotPass extends StatefulWidget {
 
 class _MyForgotPassState extends State<MyForgotPass> {
   //class definition.
+  final _emailcontroller = TextEditingController(); // classifies the variable as a text editing controller and allows access to methods for retrieving information.
+
   @override
   Widget build(BuildContext context) {
     //initializes the page to be built.
@@ -67,6 +73,7 @@ class _MyForgotPassState extends State<MyForgotPass> {
                     ),
                   ),
                   TextField(
+                    controller: _emailcontroller, // variable to get the string from the user input.
                     // textfield widget.
                     textAlign: TextAlign.center,
                     obscureText: false, //obscure text to hide the users input.
@@ -127,8 +134,11 @@ class _MyForgotPassState extends State<MyForgotPass> {
 
   Future<void> sendEmail() async {
     // currently no fucntionality
+   
+  EmailPasswordAuthProvider authProvider = EmailPasswordAuthProvider(app); // app arguement isnt valid. unsure of what goes on here. have tried "MyApp()", "app" , and empty 
+    await authProvider.resetPassword(_emailcontroller.text.trim());  // this retrieves the users input from the text box and converts it to a string.
+   
     // await this.
-
     // final Email send_email = Email(
     //   body: 'body of email',
     //   subject: 'subject of email',
